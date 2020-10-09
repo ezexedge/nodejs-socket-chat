@@ -1,56 +1,59 @@
 const { io } = require('../server');
+const { Usuarios } = require('../classes/usuarios');
+const { crearMensaje } = require('../utilidades/utilidades');
 
-const {Usuarios} = require('../classes/usuarios')
-
-const { crearMensajes} = require('../utils/util')
-
-const usuarios = new Usuarios()
+const usuarios = new Usuarios();
 
 io.on('connection', (client) => {
 
+    client.on('entrarChat', (data, callback) => {
 
-    client.on('entrarChat',(usuario,callback)=>{
-        console.log(usuario)
 
-        if(!usuario.nombre || !usuario.sala){
+        if (!data.nombre || !data.sala) {
             return callback({
                 error: true,
-                mensaje: 'el nombre es necesario y la sala es necesaria'
-            })
+                mensaje: 'El nombre/sala es necesario'
+            });
         }
 
-        client.join(usuario.sala)
+        client.join(data.sala);
 
-        let personas = usuarios.agregarPersona(client.id, usuario.nombre,usuario.sala)
+        usuarios.agregarPersona(client.id, data.nombre, data.sala);
 
-        client.broadcast.to(usuario.sala).emit('listaPersona',usuarios.getPersonaPorSala(usuario.sala))
-        callback(usuarios.getPersonaPorSala(usuario.sala))
-    })
+        client.broadcast.to(data.sala).emit('listaPersona', usuarios.getPersonasPorSala(data.sala));
+        client.broadcast.to(data.sala).emit('crearMensaje', crearMensaje('Administrador', `${ data.nombre } se unió`));
 
-    client.on('crearMensaje',(data)=>{
-        let persona = usuarios.getPersona(client.id)
+        callback(usuarios.getPersonasPorSala(data.sala));
 
-        let mensaje = crearMensajes(persona.nombre,data.mensaje)
-        client.broadcast.emit('crearMensaje',mensaje)
+    });
 
+    client.on('crearMensaje', (data, callback) => {
 
-    })
+        let persona = usuarios.getPersona(client.id);
 
+        let mensaje = crearMensaje(persona.nombre, data.mensaje);
+        client.broadcast.to(persona.sala).emit('crearMensaje', mensaje);
 
-    client.on('disconnect', ()=>{
-       let personaBorrada = usuarios.borrarPersona(client.id)
-       client.broadcast.to(personaBorrada.sala).emit('crearMensaje', crearMensajes('admin', `${personaBorrada} salio`))
-
-       client.broadcast.to(personaBorrada.sala).emit('listaPersona',usuarios.getPersonaPorSala(personaBorrada.sala))
+        callback(mensaje);
+    });
 
 
-    })
+    client.on('disconnect', () => {
 
-    client.on('mensajePrivado',(data)=>{
-        let persona = usuarios.getPersona(client.id)
-        client.broadcast.to(data.para).emit('mensajePrivado', crearMensajes(persona.nombre,data.mensaje))
-    })
+        let personaBorrada = usuarios.borrarPersona(client.id);
 
-  
+        client.broadcast.to(personaBorrada.sala).emit('crearMensaje', crearMensaje('Administrador', `${ personaBorrada.nombre } salió`));
+        client.broadcast.to(personaBorrada.sala).emit('listaPersona', usuarios.getPersonasPorSala(personaBorrada.sala));
+
+
+    });
+
+    // Mensajes privados
+    client.on('mensajePrivado', data => {
+
+        let persona = usuarios.getPersona(client.id);
+        client.broadcast.to(data.para).emit('mensajePrivado', crearMensaje(persona.nombre, data.mensaje));
+
+    });
 
 });

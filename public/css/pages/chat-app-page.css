@@ -33,7 +33,7 @@ chat application Page
       cursor: pointer;
       position: absolute;
       left: -webkit-calc(100% - 1px);
-      top: 50%;
+      
       z-index: 100;
       background-color: #fff;
       -webkit-box-shadow: 1px 0 3px rgba(0, 0, 0, 0.2);
@@ -71,7 +71,7 @@ chat application Page
     .chat-main-box .chat-right-aside .chat-list {
       max-height: none;
       height: 100%;
-      padding-top: 40px; }
+      padding-top: 0px !important; }
       .chat-main-box .chat-right-aside .chat-list .chat-text {
         border-radius: 6px; }
     .chat-main-box .chat-right-aside .send-chat-box {

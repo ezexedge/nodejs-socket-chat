@@ -25,7 +25,7 @@ function renderizarUsuarios(personas) { // [{},{},{}]
     for (var i = 0; i < personas.length; i++) {
 
         html += '<li>';
-        html += '    <a data-id="' + personas[i].id + '"  href="javascript:void(0)"><img src="assets/images/users/1.jpg" alt="user-img" class="img-circle"> <span>' + personas[i].nombre + ' <small class="text-success">online</small></span></a>';
+        html += '    <a data-id="' + personas[i].id + '"  href="javascript:void(0)"><img src="http://www.jdevoto.cl/web/wp-content/uploads/2018/04/default-user-img.jpg" alt="user-img" class="img-circle"> <span>' + personas[i].nombre + ' <small class="text-success">online</small></span></a>';
         html += '</li>';
     }
 
@@ -51,7 +51,7 @@ function renderizarMensajes(mensaje, yo) {
         html += '        <h5>' + mensaje.nombre + '</h5>';
         html += '        <div class="box bg-light-inverse">' + mensaje.mensaje + '</div>';
         html += '    </div>';
-        html += '    <div class="chat-img"><img src="assets/images/users/5.jpg" alt="user" /></div>';
+        html += '    <div class="chat-img"><img src="http://www.jdevoto.cl/web/wp-content/uploads/2018/04/default-user-img.jpg" alt="user" /></div>';
         html += '    <div class="chat-time">' + hora + '</div>';
         html += '</li>';
 
@@ -60,7 +60,7 @@ function renderizarMensajes(mensaje, yo) {
         html += '<li class="animated fadeIn">';
 
         if (mensaje.nombre !== 'Administrador') {
-            html += '    <div class="chat-img"><img src="assets/images/users/1.jpg" alt="user" /></div>';
+            html += '    <div class="chat-img"><img src="http://www.jdevoto.cl/web/wp-content/uploads/2018/04/default-user-img.jpg" alt="user" /></div>';
         }
 
         html += '    <div class="chat-content">';

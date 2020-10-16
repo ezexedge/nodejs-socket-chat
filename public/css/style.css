@@ -5883,3 +5883,23 @@ File: scss
     text-align: center;
     margin-top: 10px;
     overflow: hidden; } }
+    .footer{
+      display: none !important;
+    }
+
+    .container-fluid {
+    padding: 0px 0px !important;
+}
+
+.chat-rbox{
+  height: 95vh !important;
+}
+.chat-main-box{
+
+}
+body{
+  background-color: black;
+}
+
+.page-wrapper{
+}
